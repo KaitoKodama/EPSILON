@@ -25,43 +25,42 @@ public class AnyDictionary<Tkey, Tvalue>
 		this.value = pair.Value;
 	}
 }
+
 // ユニット配置
-public class ActorUnit
-{
-	public ActorUnit(GameObject prefab)
-	{
-		this.prefab = prefab;
-		param = prefab.GetComponent<ActorBase>().Param;
-	}
-	public ActorParam param;
-	public GameObject prefab;
-}
 public class RequestUnit
 {
-	public RequestUnit(ActorUnit actorUnit, CVSUnitRequest request, GameObject requestGrid)
+	public RequestUnit(ActorParam param, GameObject requestGrid)
 	{
-		this.actorUnit = actorUnit;
-		this.request = request;
+		this.param = param;
 		this.requestGrid = requestGrid;
 	}
-	public ActorUnit actorUnit;
-	public CVSUnitRequest request;
+	public ActorParam param;
 	public GameObject requestGrid;
 }
 
-namespace InstanceManager
-{ 
-	public class StatuePool
+[System.Serializable]
+public class RequestEnemyUnit
+{
+	public RequestEnemyUnit(ActorParam param, Transform location)
 	{
-		public StatuePool(ActorBase actor, GameObject obj, Color requestColor)
-		{
-			this.actor = actor;
-			this.obj = obj;
-			obj.GetComponent<Image>().color = requestColor;
-		}
-		public ActorBase actor;
-		public GameObject obj;
+		this.param = param;
+		this.location = location;
 	}
+	public ActorParam param;
+	public Transform location;
+}
+
+// ステート表示
+public class StatuePool
+{
+	public StatuePool(ActorBase actor, CVSCondition condition, Color requestColor)
+	{
+		this.actor = actor;
+		this.condition = condition;
+		condition.InitColor(requestColor);
+	}
+	public ActorBase actor;
+	public CVSCondition condition;
 }
 
 
@@ -78,6 +77,42 @@ public enum Friendly
 	PlayerFriendly,
 	EnemyFriendly,
 }
+public enum ActorScript
+{
+	Normal,
+	BottomBase,
+	SurfaceBase,
+	EscapeBase,
+}
+public enum StagePatch
+{
+	None,
+	TutorialCompleted,
+	Stage01Completed,
+	Stage02Completed,
+	Stage03Completed,
+	Stage04Completed,
+	Stage05Completed,
+	Stage06Completed,
+	Stage07Completed,
+	Stage08Completed,
+}
+public enum SceneName
+{
+	TitleScene,
+	TutorialScene,
+	SelectScene,
+	FreedomScene,
+	Stage01,
+	Stage02,
+	Stage03,
+	Stage04,
+	Stage05,
+	Stage06,
+	Stage07,
+	Stage08,
+}
+
 
 
 //------------------------------------------

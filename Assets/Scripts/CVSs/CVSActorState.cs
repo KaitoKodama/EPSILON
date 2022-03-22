@@ -3,65 +3,73 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CommonUtility;
-using InstanceManager;
 
 public class CVSActorState : MonoBehaviour
 {
-	[SerializeField] Button displayBtn = default;
-	[SerializeField] GameObject dispalyBtnObj = default;
-    [SerializeField] GameObject circlePrefab = default;
+	[SerializeField] Button stateButton;
+	[SerializeField] GameObject conditionPrefab;
 
-	private List<StatuePool> statuePoolList = new List<StatuePool>();
-    private BattleManager battleManager;
-	private float circleOffset = 0.7f;
-	private float circleSpeed = 7f;
-    private bool isVisualizeState = false;
+	[SerializeField]private List<StatuePool> statuePoolList;
+	private BattleManager battleManager;
+	private float circleOffset = 0.6f;
+	private bool isVisualize = false;
 
-	void Start()
-    {
-        battleManager = GameObject.FindWithTag("BattleManager").GetComponent<BattleManager>();
-        battleManager.OnBeginBattleNotifyerHandler = OnBeginBattleReciever;
-
-		displayBtn.onClick.AddListener(OnDisplayButton);
-		dispalyBtnObj.SetActive(false);
-    }
+	private void Start()
+	{
+		battleManager = FindObjectOfType<BattleManager>();
+		battleManager.OnBattleBeginNotifyerHandler = OnBattleBeginReciever;
+		stateButton.onClick.AddListener(OnStateButton);
+	}
 	private void Update()
 	{
-		if(statuePoolList != null && isVisualizeState)
+		if (statuePoolList != null && isVisualize)
 		{
-			foreach(var pool in statuePoolList)
+			foreach (var pool in statuePoolList)
 			{
+				pool.condition.transform.position = pool.actor.transform.position;
 				if (pool.actor.enabled)
 				{
-					var actorPos = pool.actor.transform.position;
-					var poolPos = pool.obj.transform.position;
-					float deltaY = Mathf.Lerp(poolPos.y, actorPos.y - circleOffset, Time.deltaTime * circleSpeed);
-					pool.obj.transform.position = new Vector3(actorPos.x, deltaY, 0);
+					var to = pool.actor.transform.position;
+					to.x += circleOffset;
+					to.y += circleOffset;
+					pool.condition.transform.position = to;
+					pool.condition.SetCircleFill(pool.actor.ClampHP);
 				}
 				else
 				{
-					if (pool.obj.activeSelf) pool.obj.SetActive(false);
+					if (pool.condition.gameObject.activeSelf)
+					{
+						pool.condition.gameObject.SetActive(false);
+					}
 				}
 			}
 		}
 	}
 
-	private void OnDisplayButton()
+	private void OnBattleBeginReciever(List<ActorBase> actorList)
 	{
-		isVisualizeState = Utility.FilpFlop(isVisualizeState);
-		foreach(var pool in statuePoolList)
-		{
-			if (pool.actor.enabled) pool.obj.SetActive(Utility.FilpFlop(pool.obj.activeSelf));
-		}
-	}
-	private void OnBeginBattleReciever(List<ActorBase> actorList)
-	{
-		dispalyBtnObj.SetActive(true);
+		statuePoolList = new List<StatuePool>();
 		foreach (var actor in actorList)
 		{
-			var circle = Instantiate(circlePrefab, transform);
+			var circle = Instantiate(conditionPrefab, transform);
+			var condition = circle.GetComponent<CVSCondition>();
 			circle.SetActive(false);
-			statuePoolList.Add(new StatuePool(actor, circle, GetColorDueFriendly(actor.Friendly)));
+			statuePoolList.Add(new StatuePool(actor, condition, GetColorDueFriendly(actor.Friendly)));
+		}
+	}
+	private void OnStateButton()
+	{
+		if(statuePoolList != null)
+		{
+			isVisualize = Utility.FilpFlop(isVisualize);
+			foreach (var pool in statuePoolList)
+			{
+				if (pool.actor.enabled)
+				{
+					var cvs = pool.condition.gameObject;
+					cvs.SetActive(Utility.FilpFlop(cvs.activeSelf));
+				}
+			}
 		}
 	}
 	private Color GetColorDueFriendly(Friendly friendly)

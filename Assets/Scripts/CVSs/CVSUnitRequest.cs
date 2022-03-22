@@ -6,9 +6,10 @@ using UnityEngine.EventSystems;
 
 public class CVSUnitRequest : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
-    [SerializeField] Button requestCancelBtn;
+    [SerializeField] Button requestCancelBtn = default;
     [SerializeField] Image gridImg = default;
 
+    private CVSUnitSelecter unitSelecter;
     private RequestUnit requestUnit;
     private SmoothCamera smoothCamera;
     private Transform _transform;
@@ -24,10 +25,11 @@ public class CVSUnitRequest : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
     //------------------------------------------
     // 外部共有関数
     //------------------------------------------
-    public void InitRequestGrid(RequestUnit unit)
+    public void InitRequestGrid(CVSUnitSelecter unitSelecter, RequestUnit request)
 	{
-        requestUnit = unit;
-        gridImg.sprite = unit.actorUnit.param.ActorSprite;
+        this.unitSelecter = unitSelecter;
+        requestUnit = request;
+        gridImg.sprite = request.param.ActorSprite;
 
         var cvs = GetComponent<Canvas>();
         cvs.worldCamera = Camera.main;
@@ -39,7 +41,7 @@ public class CVSUnitRequest : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
     //------------------------------------------
     private void OnRequestCancelBtn()
 	{
-        FindObjectOfType<CVSUnitSelecter>().OnRequestCancel(requestUnit);
+        unitSelecter.OnRemoveRequestUnit(requestUnit);
         gameObject.SetActive(false);
 	}
 
@@ -55,6 +57,7 @@ public class CVSUnitRequest : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
 	{
         var pos = Camera.main.ScreenToWorldPoint(eventData.position);
         pos.z = 0;
+        if (pos.x > -1) pos.x = -1;
         _transform.position = pos;
 	}
 	public void OnEndDrag(PointerEventData eventData)

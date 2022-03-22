@@ -7,9 +7,27 @@ using CommonUtility;
 
 public class BattleManager : MonoBehaviour
 {
-	[Header("---------- ステージを設定 ----------")]
-	[SerializeField] StageData stageData;
-	[SerializeField] ActorBase[] enemys;
+	[Header("利用可能キャラデータ")]
+	[Header("------ 戦闘ユニット情報 ------")]
+	[SerializeField] ActorParam[] enableActorParams = default;
+	[Header("敵キャラデータ")]
+	[SerializeField] RequestEnemyUnit[] requestEnemyUnits = default;
+	[Header("利用可能コスト")]
+	[SerializeField] float enableCost = default;
+
+	[Header("現在のシーン名")]
+	[Header("------ 保存と遷移用情報 ------")]
+	[Space(20)]
+	[SerializeField] SceneName currentScene = default;
+	[Header("遷移後のシーン名")]
+	[SerializeField] SceneName nextScene = default;
+	[Header("獲得パッチ")]
+	[SerializeField] StagePatch gainPatch = default;
+
+	[Header("非表示オブジェクト")]
+	[Header("------ 非アクティブ化したいオブジェクト ------")]
+	[Space(20)]
+	[SerializeField] GameObject centerBar = default;
 
 	private List<ActorBase> actorList = new List<ActorBase>();
 	private CVSResult cvsResult;
@@ -21,14 +39,23 @@ public class BattleManager : MonoBehaviour
 	private void Start()
 	{
 		cvsResult = GetComponentInChildren<CVSResult>();
-	}
 
+		foreach(var el in requestEnemyUnits)
+		{
+			var enemy = Instantiate(el.param.ActorPrefab, el.location.position, Quaternion.identity);
+			var actor = enemy.GetComponent<ActorBase>();
+			actor.InitActor(el.param, Friendly.EnemyFriendly);
+			actorList.Add(actor);
+			enemyNum += 1;
+		}
+	}
 
 	//------------------------------------------
 	// デリゲート通知
 	//------------------------------------------
-	public delegate void OnBeginBattleNotifyer(List<ActorBase> actorList);
-	public OnBeginBattleNotifyer OnBeginBattleNotifyerHandler;
+	public delegate void OnBattleBeginNotifyer(List<ActorBase> actorList);
+	public OnBattleBeginNotifyer OnBattleBeginNotifyerHandler;
+
 
 
 	//------------------------------------------
@@ -53,7 +80,12 @@ public class BattleManager : MonoBehaviour
 	//------------------------------------------
 	// 外部共有関数
 	//------------------------------------------
-	public StageData StageData { get => stageData; }
+	public ActorParam[] EnableActorParams { get => enableActorParams; }
+	public SceneName CurrentScene { get => currentScene; }
+	public SceneName NextScene { get => nextScene; }
+	public StagePatch GainPatch { get => gainPatch; }
+	public float EnableCost { get => enableCost; }
+
 	public ActorBase GetTrackableActor(ActorBase actor)
 	{
 		if (actorList == null && !isBattleBegin) return null;
@@ -80,18 +112,13 @@ public class BattleManager : MonoBehaviour
 	}
 	public void OnBeginBattle(List<RequestUnit> requestUnitList)
 	{
-		foreach(var el in enemys)
-		{
-			el.Friendly = Friendly.EnemyFriendly;
-			actorList.Add(el);
-			enemyNum += 1;
-		}
+		centerBar.SetActive(false);
 
 		foreach (var unit in requestUnitList)
 		{
-			var actorObj = Instantiate(unit.actorUnit.prefab, unit.requestGrid.transform.position, Quaternion.identity);
+			var actorObj = Instantiate(unit.param.ActorPrefab, unit.requestGrid.transform.position, Quaternion.identity);
 			var actor = actorObj.GetComponent<ActorBase>();
-			actor.Friendly = Friendly.PlayerFriendly;
+			actor.InitActor(unit.param, Friendly.PlayerFriendly);
 			unit.requestGrid.SetActive(false);
 			actorList.Add(actor);
 			playerNum += 1;
@@ -103,7 +130,7 @@ public class BattleManager : MonoBehaviour
 			actor.OnDeathTheActorNotifyerHandler = OnDeathReciever;
 		}
 
-		OnBeginBattleNotifyerHandler?.Invoke(actorList);
+		OnBattleBeginNotifyerHandler?.Invoke(actorList);
 		isBattleBegin = true;
 	}
 

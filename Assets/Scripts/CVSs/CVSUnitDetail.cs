@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class CVSUnitDetail : MonoBehaviour
 {
-	[SerializeField] Button closeBtn;
-	[SerializeField] Text nameTxt;
-	[SerializeField] Text costTxt;
-	[SerializeField] Text explainTxt;
-	[SerializeField] Image actorImg;
+	[SerializeField] Button closeBtn = default;
+	[SerializeField] Text nameTxt = default;
+	[SerializeField] Text costTxt = default;
+	[SerializeField] Text explainTxt = default;
+	[SerializeField] Image actorImg = default;
 
 
 	private void Start()

@@ -31,12 +31,12 @@ public class CVSUnitSelecter : MonoBehaviour
 		unitGroupRect = unitGroupPanel.GetComponent<RectTransform>();
 		unitGroupRect.anchoredPosition = new Vector2(0, -37f);
 
-		battleManager = GameObject.FindWithTag("BattleManager").GetComponent<BattleManager>();
-		enableCost = battleManager.StageData.EnableCost;
-		foreach (var actorPrefab in battleManager.StageData.EnablePrefabs)
+		battleManager = FindObjectOfType<BattleManager>();
+		enableCost = battleManager.EnableCost;
+		foreach (var actorParam in battleManager.EnableActorParams)
 		{
 			var grid = Instantiate(unitGridPrefab, unitParent).GetComponent<CVSUnitGrid>();
-			grid.InitGrid(this, actorPrefab);
+			grid.InitGrid(this, actorParam);
 		}
 	}
 
@@ -58,15 +58,15 @@ public class CVSUnitSelecter : MonoBehaviour
 	//------------------------------------------
 	// 外部共有関数
 	//------------------------------------------
-	public void OnRequestCancel(RequestUnit cancelUnit)
+	public void OnRemoveRequestUnit(RequestUnit cancelUnit)
 	{
-		enableCost += cancelUnit.actorUnit.param.Cost;
+		enableCost += cancelUnit.param.Cost;
 		requestUnitList.Remove(cancelUnit);
 		SetUnitCostText();
 	}
-	public void OnRequestGenerate(RequestUnit requestUnit)
+	public void OnAddRequestUnit(RequestUnit requestUnit)
 	{
-		enableCost -= requestUnit.actorUnit.param.Cost;
+		enableCost -= requestUnit.param.Cost;
 		requestUnitList.Add(requestUnit);
 		SetUnitCostText();
 	}

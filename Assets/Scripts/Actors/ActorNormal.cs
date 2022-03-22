@@ -15,7 +15,7 @@ public class ActorNormal : ActorBase
 	//------------------------------------------
 	// Unityタイムライン
 	//------------------------------------------
-	protected override void SetStateMachineOnBegin()
+	protected override void InitStateMachine()
 	{
 		stateMachine = new StateMachine<ActorNormal>(this);
 		stateMachine.AddTransition<StateWonder, StateChase>((int)Event.DoChase);
@@ -27,14 +27,6 @@ public class ActorNormal : ActorBase
 		stateMachine.AddTransition<StateAttack, StateDamage>((int)Event.DoDamage);
 		stateMachine.AddAnyTransition<StateDeath>(((int)Event.DoDeath));
 		stateMachine.Start<StateWonder>();
-	}
-	private void Update()
-	{
-		stateMachine.Update();
-	}
-	private void FixedUpdate()
-	{
-		stateMachine.FixedUpdate();
 	}
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
@@ -63,10 +55,19 @@ public class ActorNormal : ActorBase
 		base.ApplyDamage(biter, damage);
 		if (hp > 0)
 		{
-			VisualizeDamage();
 			stateMachine.Dispatch(((int)Event.DoDamage));
 		}
 		else stateMachine.Dispatch(((int)Event.DoDeath));
+	}
+
+	protected override void OnVirtualUpdate()
+	{
+		stateMachine.Update();
+	}
+
+	protected override void OnVirtualFixedUpdate()
+	{
+		stateMachine.FixedUpdate();
 	}
 
 
@@ -102,6 +103,7 @@ public class ActorNormal : ActorBase
 			{
 				stateMachine.Dispatch(((int)Event.DoAttack));
 			}
+			owner.FetchCurrentDirection();
 		}
 		protected override void OnFixedUpdate()
 		{
@@ -158,7 +160,7 @@ public class ActorNormal : ActorBase
 			if (!isOrdered)
 			{
 				isOrdered = true;
-				owner.VisualizeDeath();
+				owner.OnDeathEffectBegin();
 			}
 		}
 		protected override void OnFixedUpdate()

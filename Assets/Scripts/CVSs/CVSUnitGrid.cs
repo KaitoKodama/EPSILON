@@ -4,33 +4,27 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class CVSUnitGrid : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
+public class CVSUnitGrid : MonoBehaviour, IBeginDragHandler, IDragHandler, IPointerClickHandler
 {
 	[SerializeField] Image unitImg = default;
 	[SerializeField] Text costTxt = default;
 	[SerializeField] GameObject unitRequestPrefab = default;
 
 	private CVSUnitSelecter unitSelecter;
-	private SmoothCamera smoothCamera;
+	private ActorParam reruestActorParam;
 	private RequestUnit requestUnit;
-	private ActorUnit actorUnit;
-
-
-	private void Start()
-	{
-		smoothCamera = Camera.main.GetComponent<SmoothCamera>();
-	}
 
 
 	//------------------------------------------
 	// 外部共有関数
 	//------------------------------------------
-	public void InitGrid(CVSUnitSelecter unitSelecter, GameObject obj)
+	public void InitGrid(CVSUnitSelecter unitSelecter, ActorParam reruestActorParam)
 	{
 		this.unitSelecter = unitSelecter;
-		actorUnit = new ActorUnit(obj);
-		unitImg.sprite = actorUnit.param.ActorSprite;
-		costTxt.text = actorUnit.param.Cost.ToString();
+		this.reruestActorParam = reruestActorParam;
+
+		unitImg.sprite = reruestActorParam.ActorSprite;
+		costTxt.text = reruestActorParam.Cost.ToString();
 	}
 
 
@@ -39,20 +33,19 @@ public class CVSUnitGrid : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	//------------------------------------------
 	public void OnPointerClick(PointerEventData eventData)
 	{
-		unitSelecter.OnDetailDisplay(actorUnit.param);
+		unitSelecter.OnDetailDisplay(reruestActorParam);
 	}
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
-		smoothCamera.enabled = false;
-		if (unitSelecter.IsEnableToGenerate(actorUnit.param.Cost))
+		if (unitSelecter.IsEnableToGenerate(reruestActorParam.Cost))
 		{
 			var requestGrid = Instantiate(unitRequestPrefab);
 			var requet = requestGrid.GetComponent<CVSUnitRequest>();
-			requestUnit = new RequestUnit(actorUnit, requet, requestGrid);
+			requestUnit = new RequestUnit(reruestActorParam, requestGrid);
 
-			requet.InitRequestGrid(requestUnit);
-			unitSelecter.OnRequestGenerate(requestUnit);
+			requet.InitRequestGrid(unitSelecter, requestUnit);
+			unitSelecter.OnAddRequestUnit(requestUnit);
 		}
 	}
 	public void OnDrag(PointerEventData eventData)
@@ -61,12 +54,8 @@ public class CVSUnitGrid : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 		{
 			var pos = Camera.main.ScreenToWorldPoint(eventData.position);
 			pos.z = 0;
+			if (pos.x > -1) pos.x = -1;
 			requestUnit.requestGrid.transform.position = pos;
 		}
-	}
-
-	public void OnEndDrag(PointerEventData eventData)
-	{
-		smoothCamera.enabled = true;
 	}
 }
