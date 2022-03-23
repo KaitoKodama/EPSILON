@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f241295790040845b37d1e9fb474c48, type: 3}
   m_Name: 22
   m_EditorClassIdentifier: 
-  actorPrefab: {fileID: 5497778677564879969, guid: e9d62dce8fb59564d869aa68bfb82aa3, type: 3}
+  actorPrefab: {fileID: 5497778677564879969, guid: d7751dfc1221612448a1f589799aee2f, type: 3}
   controller: {fileID: 9100000, guid: 78ee0f74b85e61e449085c70376ae03f, type: 2}
   actorSprite: {fileID: 21300000, guid: 1da4a6a519947de4ba2487e3ca442d4d, type: 3}
   cost: 10
@@ -20,6 +20,6 @@ MonoBehaviour:
   actorExplain: "\u53E4\u751F\u4EE3\u30C7\u30DC\u30F3\u7D00\u306B\u51FA\u73FE\u3057\u3066\u5E83\u304F\u4E16\u754C\u306E\u6C34\u57DF\u306B\u6804\u3048\u305F\u304C\u3001\n\u7D046550\u4E07\u5E74\u524D\u306E\u5927\u91CF\u7D76\u6EC5\u3092\u5883\u306B\u307B\u3068\u3093\u3069\u5168\u3066\u306E\u7A2E\u304C\u7D76\u6EC5\u3057\u305F\u3002"
   biteDestinate: {x: 0, y: 1}
   biteRate: 70
-  health: 80
+  health: 200
   power: 20
   trackRate: 75

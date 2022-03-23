@@ -62,15 +62,16 @@ public abstract class ActorBase : MonoBehaviour
 	//------------------------------------------
 	// 外部共有関数
 	//------------------------------------------
-	public ActorParam Param { get => param; }
 	public Friendly Friendly { get => friendly; }
 	public float ClampHP { get { return hp / maxHp; } }
+	public float MaxHP { get => hp; }
 
 	public abstract void OnAnimationExit();
 	public virtual void ApplyDamage(ActorBase biter, float damage)
 	{
 		if (hp > 0)
 		{
+			OnDamageNotifyerHandler.Invoke(friendly, damage);
 			render.DOColor(new Color(1, ClampHP, ClampHP, 1), 1f);
 			bitingSource = biter;
 			hp -= damage;
@@ -82,7 +83,9 @@ public abstract class ActorBase : MonoBehaviour
 	// デリゲート通知
 	//------------------------------------------
 	public delegate void OnDeathTheActorNotifyer(Friendly friendly);
+	public delegate void OnDamageNotifyer(Friendly friendly, float damage);
 	public OnDeathTheActorNotifyer OnDeathTheActorNotifyerHandler;
+	public OnDamageNotifyer OnDamageNotifyerHandler;
 
 
 	//------------------------------------------

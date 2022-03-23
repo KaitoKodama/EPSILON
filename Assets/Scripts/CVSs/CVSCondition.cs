@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 using UnityEngine.UI;
 
 public class CVSCondition : MonoBehaviour
@@ -13,6 +14,6 @@ public class CVSCondition : MonoBehaviour
 	}
 	public void SetCircleFill(float clampHP)
 	{
-		circleImage.fillAmount = clampHP;
+		circleImage.DOFillAmount(clampHP, 0.5f);
 	}
 }

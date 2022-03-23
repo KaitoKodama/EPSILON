@@ -97,7 +97,7 @@ public class BattleManager : MonoBehaviour
 		{
 			if(target != null)
 			{
-				if(target.enabled && target.Friendly != actor.Friendly && Utility.Probability(target.Param.TrackRate))
+				if(target.enabled && target.Friendly != actor.Friendly)
 				{
 					float dist = Vector2.Distance(actor.transform.position, target.transform.position);
 					if (dist <= distance)

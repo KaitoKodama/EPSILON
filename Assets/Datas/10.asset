@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: 10
   m_EditorClassIdentifier: 
   actorPrefab: {fileID: 5497778677564879969, guid: e9d62dce8fb59564d869aa68bfb82aa3, type: 3}
-  controller: {fileID: 9100000, guid: 78ee0f74b85e61e449085c70376ae03f, type: 2}
+  controller: {fileID: 9100000, guid: 16c2e7d0fb7937644adcc7c4f4c6400b, type: 2}
   actorSprite: {fileID: 21300000, guid: 877e3f4d87382be4ba2658a1512c2ab6, type: 3}
   cost: 8
   actorName: "\u30A2\u30EB\u30D3\u30CE\u30CD\u30AA\u30F3\u30C6\u30C8\u30E9"
   actorExplain: "\u540D\u524D\u306E\u7531\u6765\u3068\u306A\u3063\u3066\u3044\u308B\u30CD\u30AA\u30F3\u30B5\u30A4\u30F3\u3092\u9AE3\u9AF4\u3068\u3055\u305B\u308B\u5149\u6CA2\u3060\u304C\u3001\n\u767A\u5149\u5668\u5B98\u3092\u5099\u3048\u308B\u8A33\u3067\u306F\u306A\u304F\u3001\u6240\u5B9A\u306E\u8272\u7D20\u3092\u542B\u3093\u3060\u5149\u306E\u53CD\u5C04\u5C64\u304C\u3042\u308B\u3053\u3068\u306B\u7531\u6765\u3059\u308B\u3002"
   biteDestinate: {x: 0, y: 1}
   biteRate: 56
-  health: 64
+  health: 160
   power: 16
   trackRate: 85

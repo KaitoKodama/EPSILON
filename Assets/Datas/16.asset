@@ -20,6 +20,6 @@ MonoBehaviour:
   actorExplain: "\u9ED2\u3044\u4F53\u8272\u7B87\u6240\u304C\u8D64\u304F\u306A\u3063\u305F\u30D3\u30FC\u30B7\u30E5\u30EA\u30F3\u30D7\u3092\u56FA\u5B9A\u5316\u3057\u305F\u54C1\u7A2E\u3002\n\u4F53\u9577\u306F2cm\u524D\u5F8C\u3067\u5BFF\u547D\u306F2\u5E74\u7A0B\u5EA6\u3002"
   biteDestinate: {x: 0, y: 1}
   biteRate: 42
-  health: 48
+  health: 120
   power: 12
   trackRate: 95

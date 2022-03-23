@@ -4,20 +4,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class CVSUnitRequest : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class CVSUnitRequest : MonoBehaviour, IDragHandler
 {
     [SerializeField] Button requestCancelBtn = default;
     [SerializeField] Image gridImg = default;
 
     private CVSUnitSelecter unitSelecter;
     private RequestUnit requestUnit;
-    private SmoothCamera smoothCamera;
     private Transform _transform;
+
 
 	void Start()
     {
         requestCancelBtn.onClick.AddListener(OnRequestCancelBtn);
-        smoothCamera = Camera.main.GetComponent<SmoothCamera>();
         _transform = transform;
     }
 
@@ -49,19 +48,11 @@ public class CVSUnitRequest : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
     //------------------------------------------
     // インターフェイス
     //------------------------------------------
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        smoothCamera.enabled = false;
-    }
     public void OnDrag(PointerEventData eventData)
 	{
         var pos = Camera.main.ScreenToWorldPoint(eventData.position);
         pos.z = 0;
         if (pos.x > -1) pos.x = -1;
         _transform.position = pos;
-	}
-	public void OnEndDrag(PointerEventData eventData)
-	{
-        smoothCamera.enabled = true;
 	}
 }

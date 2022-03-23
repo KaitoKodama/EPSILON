@@ -20,6 +20,6 @@ MonoBehaviour:
   actorExplain: "\u4F53\u9577\u306F\u6700\u5927\u3067\u30822.5-3cm\u7A0B\u5EA6\u3068\u5C0F\u578B\u3067\u3042\u308B\u3002"
   biteDestinate: {x: 0, y: 1}
   biteRate: 35
-  health: 40
+  health: 100
   power: 10
   trackRate: 100
