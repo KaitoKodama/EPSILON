@@ -78,8 +78,10 @@
     <Compile Include="Assets\Scripts\StateMachine.cs" />
     <Compile Include="Assets\Import\Joystick Pack\Examples\JoystickPlayerExample.cs" />
     <Compile Include="Assets\Scripts\CVSs\CVSActorState.cs" />
-    <Compile Include="Assets\Import\Joystick Pack\Scripts\Joysticks\VariableJoystick.cs" />
     <Compile Include="Assets\Scripts\Actors\ActorFrequent.cs" />
+    <Compile Include="Assets\Import\Joystick Pack\Scripts\Joysticks\VariableJoystick.cs" />
+    <Compile Include="Assets\Scripts\Actors\ActorDecoy.cs" />
+    <Compile Include="Assets\Scripts\Actors\ActorRecover.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

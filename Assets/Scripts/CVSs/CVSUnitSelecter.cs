@@ -29,7 +29,7 @@ public class CVSUnitSelecter : MonoBehaviour
 		InitEventSystems();
 		unitBtnImg.DOFade(0.8f, 1f).SetLoops(-1, LoopType.Yoyo);
 		unitGroupRect = unitGroupPanel.GetComponent<RectTransform>();
-		unitGroupRect.anchoredPosition = new Vector2(0, -37f);
+		unitGroupRect.anchoredPosition = new Vector2(0, -47.1f);
 
 		battleManager = FindObjectOfType<BattleManager>();
 		enableCost = battleManager.EnableCost;
@@ -94,20 +94,19 @@ public class CVSUnitSelecter : MonoBehaviour
 		{
 			isUnitGroupOpen = true;
 			unitMainArrow.transform.rotation = Quaternion.Euler(0, 0, 0);
-			unitGroupRect.DOAnchorPosY(71f, 0.5f);
+			unitGroupRect.DOAnchorPosY(71.315f, 0.5f);
 		}
 		else
 		{
 			isUnitGroupOpen = false;
 			unitMainArrow.transform.rotation = Quaternion.Euler(180, 0, 0);
-			unitGroupRect.DOAnchorPosY(-37f, 0.5f);
+			unitGroupRect.DOAnchorPosY(-47.1f, 0.5f);
 		}
 	}
 	private void OnBeginBattleButton()
 	{
 		if(requestUnitList != null && requestUnitList.Count > 0)
 		{
-			unitGroupPanel.SetActive(false);
 			battleManager.OnBeginBattle(requestUnitList);
 		}
 		else

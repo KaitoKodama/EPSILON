@@ -41,7 +41,7 @@ public class ActorParam : ScriptableObject
 
 	private float bitingForce = 10;
 	private float speed = 50;
-	private float attackDistance = 3;
+	private float actionDistance = 3;
 
 
 	public Vector2 BiteDestinate { get => biteDestinate; }
@@ -50,7 +50,7 @@ public class ActorParam : ScriptableObject
 	public float Power { get => power; }
 	public float Health { get => health;  }
 	public float BitingForce { get => bitingForce; }
-	public float AttackDistance { get => attackDistance;  }
+	public float ActionDistance { get => actionDistance;  }
 	public float TrackRate { get => trackRate; }
 
 	public GameObject ActorPrefab { get => actorPrefab; }

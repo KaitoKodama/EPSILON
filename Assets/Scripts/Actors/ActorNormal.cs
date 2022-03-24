@@ -99,7 +99,7 @@ public class ActorNormal : ActorBase
 	{
 		protected override void OnUpdate()
 		{
-			if (owner.GetTargetDistance() <= owner.param.AttackDistance)
+			if (owner.GetTargetDistance() <= owner.param.ActionDistance)
 			{
 				stateMachine.Dispatch(((int)Event.DoAttack));
 			}

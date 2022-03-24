@@ -77,13 +77,6 @@ public enum Friendly
 	PlayerFriendly,
 	EnemyFriendly,
 }
-public enum ActorScript
-{
-	Normal,
-	BottomBase,
-	SurfaceBase,
-	EscapeBase,
-}
 public enum StagePatch
 {
 	None,

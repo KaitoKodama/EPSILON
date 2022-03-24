@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f241295790040845b37d1e9fb474c48, type: 3}
   m_Name: 16
   m_EditorClassIdentifier: 
-  actorPrefab: {fileID: 5497778677564879969, guid: e9d62dce8fb59564d869aa68bfb82aa3, type: 3}
+  actorPrefab: {fileID: 5497778677564879969, guid: 2c50e1ba5e315d245a99f5a90448654d, type: 3}
   controller: {fileID: 9100000, guid: 78ee0f74b85e61e449085c70376ae03f, type: 2}
   actorSprite: {fileID: 21300000, guid: 04127df95c7d3dd4ca64fc98d8d490de, type: 3}
   cost: 6
@@ -22,4 +22,4 @@ MonoBehaviour:
   biteRate: 42
   health: 120
   power: 12
-  trackRate: 95
+  trackRate: 100

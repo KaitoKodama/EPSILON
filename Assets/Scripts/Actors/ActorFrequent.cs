@@ -12,7 +12,7 @@ public class ActorFrequent : ActorBase
 	private readonly int IsDamageHash = Animator.StringToHash("IsDamage");
 
 	private float time = 0;
-	private float freaqElapse = 2f;
+	private float freaqElapse = 5f;
 
 
 	//------------------------------------------
@@ -103,7 +103,7 @@ public class ActorFrequent : ActorBase
 	{
 		protected override void OnUpdate()
 		{
-			if (owner.GetTargetDistance() <= owner.param.AttackDistance)
+			if (owner.GetTargetDistance() <= owner.param.ActionDistance)
 			{
 				stateMachine.Dispatch(((int)Event.DoAttack));
 			}

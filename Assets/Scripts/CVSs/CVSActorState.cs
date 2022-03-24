@@ -17,8 +17,8 @@ public class CVSActorState : MonoBehaviour
 
 	private List<StatuePool> statuePoolList;
 	private BattleManager battleManager;
-	private float playerHPTotal, playerHPMaxTotal;
-	private float enemyHPTotal, enemyHPMaxTotal;
+	private float fullPlayerPreviousHP, fullPlayerCurrentHP, fullPlayerMaxHP;
+	private float fullEnemyPreviousHP, fullEnemyCurrentHP, fullEnemyMaxHP;
 	private float circleOffset = 50f;
 	private bool isVisualize = false;
 
@@ -34,6 +34,7 @@ public class CVSActorState : MonoBehaviour
 	{
 		if (statuePoolList != null && isVisualize)
 		{
+			ResetFullActorHP();
 			foreach (var pool in statuePoolList)
 			{
 				pool.condition.transform.position = pool.actor.transform.position;
@@ -45,6 +46,7 @@ public class CVSActorState : MonoBehaviour
 					actorScreenpos.z = -5f;
 					pool.condition.transform.position = actorScreenpos;
 					pool.condition.SetCircleFill(pool.actor.ClampHP);
+					SetCurrentActorHP(pool.actor.Friendly, pool.actor.HP);
 				}
 				else
 				{
@@ -54,6 +56,7 @@ public class CVSActorState : MonoBehaviour
 					}
 				}
 			}
+			RefleshFillAmountDuetoGap();
 		}
 	}
 
@@ -66,26 +69,11 @@ public class CVSActorState : MonoBehaviour
 		statuePoolList = new List<StatuePool>();
 		foreach (var actor in actorList)
 		{
-			actor.OnDamageNotifyerHandler = OnActorDamageReciever;
-			SetActorTotalHP(actor.Friendly, actor.MaxHP);
-
+			SetFullActorMaxHP(actor.Friendly, actor.MaxHP);
 			var circle = Instantiate(conditionPrefab, conditionParent.transform);
 			var condition = circle.GetComponent<CVSCondition>();
 			circle.SetActive(false);
 			statuePoolList.Add(new StatuePool(actor, condition, GetColorDueFriendly(actor.Friendly)));
-		}
-	}
-	private void OnActorDamageReciever(Friendly friendly, float damage)
-	{
-		if (friendly == Friendly.PlayerFriendly)
-		{
-			playerHPTotal -= damage;
-			playerFill.DOFillAmount(playerHPTotal / playerHPMaxTotal, 0.3f);
-		}
-		if (friendly == Friendly.EnemyFriendly)
-		{
-			enemyHPTotal -= damage;
-			enemyFill.DOFillAmount(enemyHPTotal / enemyHPMaxTotal, 0.3f);
 		}
 	}
 
@@ -116,21 +104,37 @@ public class CVSActorState : MonoBehaviour
 	//------------------------------------------
 	private Color GetColorDueFriendly(Friendly friendly)
 	{
-		if (friendly == Friendly.PlayerFriendly) return Color.green;
-		if (friendly == Friendly.EnemyFriendly) return Color.red;
+		if (friendly == Friendly.PlayerFriendly) return Color.white;
+		if (friendly == Friendly.EnemyFriendly) return Color.black;
 		return default;
 	}
-	private void SetActorTotalHP(Friendly friendly, float hp)
+
+	private void ResetFullActorHP()
 	{
-		if(friendly == Friendly.PlayerFriendly)
+		fullPlayerCurrentHP = 0;
+		fullEnemyCurrentHP = 0;
+	}
+	private void SetFullActorMaxHP(Friendly friendly, float maxHP)
+	{
+		if (friendly == Friendly.PlayerFriendly) fullPlayerMaxHP += maxHP;
+		else if (friendly == Friendly.EnemyFriendly) fullEnemyMaxHP += maxHP;
+	}
+	private void SetCurrentActorHP(Friendly friendly, float hp)
+	{
+		if (friendly == Friendly.PlayerFriendly) fullPlayerCurrentHP += hp;
+		else if(friendly == Friendly.EnemyFriendly) fullEnemyCurrentHP += hp;
+	}
+	private void RefleshFillAmountDuetoGap()
+	{
+		if(fullPlayerCurrentHP != fullPlayerPreviousHP)
 		{
-			playerHPTotal += hp;
-			playerHPMaxTotal = playerHPTotal;
+			playerFill.DOFillAmount(fullPlayerCurrentHP / fullPlayerMaxHP, 0.3f);
+			fullPlayerPreviousHP = fullPlayerCurrentHP;
 		}
-		else if(friendly == Friendly.EnemyFriendly)
+		if (fullEnemyCurrentHP != fullEnemyPreviousHP)
 		{
-			enemyHPTotal += hp;
-			enemyHPMaxTotal = enemyHPTotal;
+			enemyFill.DOFillAmount(fullEnemyCurrentHP / fullEnemyMaxHP, 0.3f);
+			fullEnemyPreviousHP = fullEnemyCurrentHP;
 		}
 	}
 }

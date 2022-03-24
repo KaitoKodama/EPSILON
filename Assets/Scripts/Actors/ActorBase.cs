@@ -62,8 +62,10 @@ public abstract class ActorBase : MonoBehaviour
 	//------------------------------------------
 	// 外部共有関数
 	//------------------------------------------
+	public ActorParam Param { get => param; }
 	public Friendly Friendly { get => friendly; }
 	public float ClampHP { get { return hp / maxHp; } }
+	public float HP { get => hp; set => hp = value; }
 	public float MaxHP { get => hp; }
 
 	public abstract void OnAnimationExit();
@@ -71,7 +73,6 @@ public abstract class ActorBase : MonoBehaviour
 	{
 		if (hp > 0)
 		{
-			OnDamageNotifyerHandler.Invoke(friendly, damage);
 			render.DOColor(new Color(1, ClampHP, ClampHP, 1), 1f);
 			bitingSource = biter;
 			hp -= damage;
@@ -83,14 +84,13 @@ public abstract class ActorBase : MonoBehaviour
 	// デリゲート通知
 	//------------------------------------------
 	public delegate void OnDeathTheActorNotifyer(Friendly friendly);
-	public delegate void OnDamageNotifyer(Friendly friendly, float damage);
 	public OnDeathTheActorNotifyer OnDeathTheActorNotifyerHandler;
-	public OnDamageNotifyer OnDamageNotifyerHandler;
 
 
 	//------------------------------------------
 	// 継承先共有関数
 	//------------------------------------------
+	protected ActorBase TrackingActorInfo { get => trackingTarget; }
 	protected abstract void InitStateMachine();
 	protected abstract void OnVirtualUpdate();
 	protected abstract void OnVirtualFixedUpdate();
@@ -126,11 +126,19 @@ public abstract class ActorBase : MonoBehaviour
 
 		rigid.velocity = Vector2.zero;
 	}
-	protected void FetchCurrentDirection()
+	protected void FetchCurrentDirection(bool isInverse = false)
 	{
 		int direction = System.Math.Sign(force.x);
-		if (direction == -1) transform.rotation = Quaternion.Euler(0, 0, 0);
-		else if (direction == 1) transform.rotation = Quaternion.Euler(0, 180, 0);
+		if (!isInverse)
+		{
+			if (direction == -1) transform.rotation = Quaternion.Euler(0, 0, 0);
+			else if (direction == 1) transform.rotation = Quaternion.Euler(0, 180, 0);
+		}
+		else
+		{
+			if (direction == -1) transform.rotation = Quaternion.Euler(0, 180, 0);
+			else if (direction == 1) transform.rotation = Quaternion.Euler(0, 0, 0);
+		}
 	}
 	protected void OnDeathEffectBegin()
 	{

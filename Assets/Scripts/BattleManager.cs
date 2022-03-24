@@ -27,7 +27,7 @@ public class BattleManager : MonoBehaviour
 	[Header("非表示オブジェクト")]
 	[Header("------ 非アクティブ化したいオブジェクト ------")]
 	[Space(20)]
-	[SerializeField] GameObject centerBar = default;
+	[SerializeField] GameObject[] disableObjects = default;
 
 	private List<ActorBase> actorList = new List<ActorBase>();
 	private CVSResult cvsResult;
@@ -97,7 +97,7 @@ public class BattleManager : MonoBehaviour
 		{
 			if(target != null)
 			{
-				if(target.enabled && target.Friendly != actor.Friendly)
+				if(target.enabled && target.Friendly != actor.Friendly && Utility.Probability(target.Param.TrackRate))
 				{
 					float dist = Vector2.Distance(actor.transform.position, target.transform.position);
 					if (dist <= distance)
@@ -110,9 +110,19 @@ public class BattleManager : MonoBehaviour
 		}
 		return targetActor;
 	}
+	public List<ActorBase> GetActorList()
+	{
+		if (actorList == null && !isBattleBegin) return null;
+		return actorList;
+	}
+
+
 	public void OnBeginBattle(List<RequestUnit> requestUnitList)
 	{
-		centerBar.SetActive(false);
+		foreach(var obj in disableObjects)
+		{
+			obj.SetActive(false);
+		}
 
 		foreach (var unit in requestUnitList)
 		{
