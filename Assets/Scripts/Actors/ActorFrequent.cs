@@ -6,6 +6,8 @@ using State = StateMachine<ActorFrequent>.State;
 
 public class ActorFrequent : ActorBase
 {
+	[SerializeField] AudioClip attackSound;
+
 	private StateMachine<ActorFrequent> stateMachine;
 	private readonly int IsAttackHash = Animator.StringToHash("IsAttack");
 	private readonly int IsBiteHash = Animator.StringToHash("IsBite");
@@ -125,8 +127,10 @@ public class ActorFrequent : ActorBase
 	}
 	private class StateAttack : State
 	{
+		float soundGap = 5f;
 		protected override void OnEnter(State prevState)
 		{
+			owner.OnPlaySoundGaply(owner.attackSound, soundGap);
 			owner.animator.SetBool(owner.IsAttackHash, true);
 		}
 		protected override void OnExit(State nextState)

@@ -45,6 +45,7 @@ public class BattleManager : MonoBehaviour
 			var enemy = Instantiate(el.param.ActorPrefab, el.location.position, Quaternion.identity);
 			var actor = enemy.GetComponent<ActorBase>();
 			actor.InitActor(el.param, Friendly.EnemyFriendly);
+			actor.enabled = false;
 			actorList.Add(actor);
 			enemyNum += 1;
 		}

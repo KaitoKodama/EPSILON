@@ -6,6 +6,8 @@ using State = StateMachine<ActorRecover>.State;
 
 public class ActorRecover : ActorBase
 {
+	[SerializeField] GameObject recoverEffect;
+
 	private StateMachine<ActorRecover> stateMachine;
 	private readonly int IsDamageHash = Animator.StringToHash("IsDamage");
 
@@ -78,23 +80,23 @@ public class ActorRecover : ActorBase
 		}
 		private ActorBase GetNearestFriendlyActor()
 		{
-			ActorBase targetActor = null;
-			float distance = float.MaxValue;
 			var actorList = owner.battleManager?.GetActorList();
+			ActorBase targetAactor = null;
+			float leastHP = float.MaxValue;
+
 			foreach(var actor in actorList)
 			{
-				var recover = actor.GetComponent<ActorRecover>();
-				if (actor != null && actor.enabled && actor.Friendly == owner.Friendly && recover == null) 
+				bool cnd01 = actor != null && actor.enabled;
+				bool cnd02 = actor.Friendly == owner.Friendly;
+				bool cnd03 = actor.GetType() != typeof(ActorRecover);
+
+				if (cnd01 && cnd02 && cnd03 && actor.HP < leastHP)
 				{
-					float dist = Vector2.Distance(owner.transform.position, actor.transform.position);
-					if (dist <= distance)
-					{
-						distance = dist;
-						targetActor = actor;
-					}
+					leastHP = actor.HP;
+					targetAactor = actor;
 				}
 			}
-			return targetActor;
+			return targetAactor;
 		}
 	}
 	private class StateChase : State
@@ -116,10 +118,11 @@ public class ActorRecover : ActorBase
 	{
 		float time = 0;
 		float coolTime = 0.3f;
-		float recoverValue = 5f;
+		float recoverValue = 0.5f;
 
 		protected override void OnEnter(State prevState)
 		{
+			owner.OnEmitAnyParticle(owner.recoverEffect, 2f);
 			owner.TrackingActorInfo.HP += recoverValue;
 		}
 		protected override void OnUpdate()

@@ -71,7 +71,9 @@
     <Compile Include="Assets\Scripts\BattleManager.cs" />
     <Compile Include="Assets\Scripts\CVSs\CVSUnitSelecter.cs" />
     <Compile Include="Assets\Import\Joystick Pack\Scripts\Joysticks\DynamicJoystick.cs" />
+    <Compile Include="Assets\Scripts\Actors\ActorDecoy.cs" />
     <Compile Include="Assets\Scripts\CVSs\CVSResult.cs" />
+    <Compile Include="Assets\Scripts\Actors\ActorRecover.cs" />
     <Compile Include="Assets\Import\Joystick Pack\Scripts\Joysticks\FixedJoystick.cs" />
     <Compile Include="Assets\Scripts\Collection.cs" />
     <Compile Include="Assets\Scripts\Actors\ActorBase.cs" />
@@ -80,8 +82,7 @@
     <Compile Include="Assets\Scripts\CVSs\CVSActorState.cs" />
     <Compile Include="Assets\Scripts\Actors\ActorFrequent.cs" />
     <Compile Include="Assets\Import\Joystick Pack\Scripts\Joysticks\VariableJoystick.cs" />
-    <Compile Include="Assets\Scripts\Actors\ActorDecoy.cs" />
-    <Compile Include="Assets\Scripts\Actors\ActorRecover.cs" />
+    <Compile Include="Assets\Scripts\BattleCVSSoundManager.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -6,8 +6,12 @@ using State = StateMachine<ActorDecoy>.State;
 
 public class ActorDecoy : ActorBase
 {
-	private StateMachine<ActorDecoy> stateMachine;
+	[SerializeField] AudioClip attackSound;
 
+	private StateMachine<ActorDecoy> stateMachine;
+	private readonly int IsAttackHash = Animator.StringToHash("IsAttack");
+	private readonly int IsBiteHash = Animator.StringToHash("IsBite");
+	private readonly int IsDamageHash = Animator.StringToHash("IsDamage");
 
 
 	//------------------------------------------
@@ -17,10 +21,32 @@ public class ActorDecoy : ActorBase
 	{
 		stateMachine = new StateMachine<ActorDecoy>(this);
 		stateMachine.AddTransition<StateDecoy, StateWonder>((int)Event.DoWonder);
+		stateMachine.AddTransition<StateAttack, StateWonder>((int)Event.DoWonder);
+		stateMachine.AddTransition<StateBite, StateWonder>((int)Event.DoWonder);
 		stateMachine.AddTransition<StateWonder, StateChase>((int)Event.DoChase);
-		stateMachine.AddAnyTransition<StateDecoy>(((int)Event.DoDecoy));
+		stateMachine.AddTransition<StateChase, StateDecoy>((int)Event.DoDecoy);
+		stateMachine.AddTransition<StateChase, StateAttack>((int)Event.DoAttack);
+		stateMachine.AddTransition<StateAttack, StateBite>((int)Event.DoBite);
+		stateMachine.AddTransition<StateAttack, StateDamage>((int)Event.DoDamage);
+		stateMachine.AddTransition<StateDecoy, StateDamage>((int)Event.DoDamage);
 		stateMachine.AddAnyTransition<StateDeath>(((int)Event.DoDeath));
 		stateMachine.Start<StateWonder>();
+	}
+	private void OnCollisionEnter2D(Collision2D collision)
+	{
+		if (hp <= 0) return;
+		if (collision.gameObject != this.gameObject)
+		{
+			var target = collision.gameObject.GetComponent<ActorBase>();
+			bool con01 = target != null && target.Friendly != Friendly;
+			bool con02 = IsBiteingEnable();
+
+			if (con01 && con02)
+			{
+				target.ApplyDamage(this, param.Power);
+				stateMachine.Dispatch(((int)Event.DoBite));
+			}
+		}
 	}
 
 
@@ -58,7 +84,7 @@ public class ActorDecoy : ActorBase
 	//------------------------------------------
 	protected enum Event
 	{
-		DoWonder, DoChase, DoDecoy, DoDeath,
+		DoWonder, DoChase, DoDecoy, DoAttack, DoBite, DoDamage, DoDeath,
 	}
 	private class StateWonder : State
 	{
@@ -84,7 +110,8 @@ public class ActorDecoy : ActorBase
 		{
 			if (owner.GetTargetDistance() <= owner.param.ActionDistance)
 			{
-				stateMachine.Dispatch(((int)Event.DoDecoy));
+				if (Utility.Probability(owner.ClampHP * 100)) stateMachine.Dispatch(((int)Event.DoDecoy));
+				else stateMachine.Dispatch(((int)Event.DoAttack));
 			}
 			else owner.FetchCurrentDirection();
 		}
@@ -111,6 +138,50 @@ public class ActorDecoy : ActorBase
 		protected override void OnFixedUpdate()
 		{
 			owner.rigid.velocity = owner.GetForceVelocity(owner.param.Speed * additiveSpeed) * -1;
+		}
+	}
+	private class StateAttack : State
+	{
+		float soundGap = 5f;
+		protected override void OnEnter(State prevState)
+		{
+			owner.OnPlaySoundGaply(owner.attackSound, soundGap);
+			owner.animator.SetBool(owner.IsAttackHash, true);
+		}
+		protected override void OnExit(State nextState)
+		{
+			owner.animator.SetBool(owner.IsAttackHash, false);
+		}
+	}
+	private class StateBite : State
+	{
+		protected override void OnEnter(State prevState)
+		{
+			owner.animator.SetBool(owner.IsBiteHash, true);
+		}
+		protected override void OnFixedUpdate()
+		{
+			owner.rigid.AddForce(owner.param.BiteDestinate);
+		}
+		protected override void OnExit(State nextState)
+		{
+			owner.animator.SetBool(owner.IsBiteHash, false);
+		}
+	}
+	private class StateDamage : State
+	{
+		protected override void OnEnter(State prevState)
+		{
+			owner.animator.SetBool(owner.IsDamageHash, true);
+		}
+		protected override void OnFixedUpdate()
+		{
+			owner.rigid.velocity = owner.GetForceVelocity(owner.param.BitingForce);
+		}
+		protected override void OnExit(State nextState)
+		{
+			owner.animator.SetBool(owner.IsDamageHash, false);
+			owner.bitingSource = null;
 		}
 	}
 	private class StateDeath : State

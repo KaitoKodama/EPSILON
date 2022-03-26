@@ -11,18 +11,24 @@ public class CVSUnitDetail : MonoBehaviour
 	[SerializeField] Text explainTxt = default;
 	[SerializeField] Image actorImg = default;
 
+	private BattleCVSSoundManager soundManager;
 
 	private void Start()
 	{
-		closeBtn.onClick.AddListener(()=> { gameObject.SetActive(false); });
-		gameObject.SetActive(false);
+		soundManager = GetComponentInParent<BattleCVSSoundManager>();
+		closeBtn.onClick.AddListener(OnCloseButton);
 	}
 	public void OnActivatePanel(ActorParam param)
 	{
+		gameObject.SetActive(true);
 		nameTxt.text = "名称：" + param.ActorName;
 		costTxt.text = "コスト：" + param.Cost.ToString() + "G";
 		explainTxt.text = "説明：" + param.ActorExplain;
 		actorImg.sprite = param.ActorSprite;
-		gameObject.SetActive(true);
+	}
+	private void OnCloseButton()
+	{
+		soundManager.OnPointSound();
+		gameObject.SetActive(false);
 	}
 }

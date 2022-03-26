@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 6
   m_EditorClassIdentifier: 
   actorPrefab: {fileID: 5497778677564879969, guid: d7751dfc1221612448a1f589799aee2f, type: 3}
-  controller: {fileID: 9100000, guid: 78ee0f74b85e61e449085c70376ae03f, type: 2}
+  controller: {fileID: 9100000, guid: 69586e1393da58b48a890bdbe66cee07, type: 2}
   actorSprite: {fileID: 21300000, guid: 94a3014e23e14b3468b27a11d49c6544, type: 3}
   cost: 10
   actorName: "\u30D9\u30BF"

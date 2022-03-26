@@ -17,6 +17,7 @@ public class CVSActorState : MonoBehaviour
 
 	private List<StatuePool> statuePoolList;
 	private BattleManager battleManager;
+	private BattleCVSSoundManager soundManager;
 	private float fullPlayerPreviousHP, fullPlayerCurrentHP, fullPlayerMaxHP;
 	private float fullEnemyPreviousHP, fullEnemyCurrentHP, fullEnemyMaxHP;
 	private float circleOffset = 50f;
@@ -24,6 +25,7 @@ public class CVSActorState : MonoBehaviour
 
 	private void Start()
 	{
+		soundManager = GetComponentInParent<BattleCVSSoundManager>();
 		battleManager = FindObjectOfType<BattleManager>();
 		battleManager.OnBattleBeginNotifyerHandler = OnBattleBeginReciever;
 		stateButton.onClick.AddListener(OnStateButton);
@@ -85,6 +87,7 @@ public class CVSActorState : MonoBehaviour
 	{
 		if(statuePoolList != null)
 		{
+			soundManager.OnPointSound();
 			isVisualize = Utility.FilpFlop(isVisualize);
 			unitWindow.SetActive(Utility.FilpFlop(unitWindow.activeSelf));
 			foreach (var pool in statuePoolList)

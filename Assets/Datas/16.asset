@@ -22,4 +22,4 @@ MonoBehaviour:
   biteRate: 42
   health: 120
   power: 12
-  trackRate: 100
+  trackRate: 95

@@ -10,12 +10,15 @@ public abstract class ActorBase : MonoBehaviour
 
 	protected ActorParam param;
 	protected BattleManager battleManager;
+	protected AudioSource audioSource;
 	protected ActorBase bitingSource;
 	protected Animator animator;
 	protected Rigidbody2D rigid;
 	protected float hp, maxHp;
 
 	private ActorBase trackingTarget;
+	private Coroutine anyCoroutine;
+	private Coroutine soundCoroutine;
 	private Coroutine particleCoroutine;
 	private SpriteRenderer render;
 	private Friendly friendly;
@@ -29,6 +32,7 @@ public abstract class ActorBase : MonoBehaviour
 	public void InitActor(ActorParam param, Friendly friendly)
 	{
 		battleManager = FindObjectOfType<BattleManager>();
+		audioSource = GetComponent<AudioSource>();
 		render = GetComponent<SpriteRenderer>();
 		animator = GetComponent<Animator>();
 		rigid = GetComponent<Rigidbody2D>();
@@ -140,6 +144,20 @@ public abstract class ActorBase : MonoBehaviour
 			else if (direction == 1) transform.rotation = Quaternion.Euler(0, 0, 0);
 		}
 	}
+	protected void OnEmitAnyParticle(GameObject obj, float gap)
+	{
+		if (anyCoroutine == null)
+		{
+			anyCoroutine = StartCoroutine(EmitAnyParticle(obj, gap));
+		}
+	}
+	protected void OnPlaySoundGaply(AudioClip clip, float gap)
+	{
+		if(soundCoroutine == null)
+		{
+			soundCoroutine = StartCoroutine(PlaySoundGaply(clip, gap));
+		}
+	}
 	protected void OnDeathEffectBegin()
 	{
 		enabled = false;
@@ -167,5 +185,19 @@ public abstract class ActorBase : MonoBehaviour
 
 		bloodEffect.SetActive(false);
 		particleCoroutine = null;
+	}
+	private IEnumerator PlaySoundGaply(AudioClip clip, float gap)
+	{
+		audioSource.PlayOneShot(clip);
+		yield return new WaitForSeconds(gap);
+		soundCoroutine = null;
+	}
+	private IEnumerator EmitAnyParticle(GameObject obj, float gap)
+	{
+		obj.SetActive(true);
+		yield return new WaitForSeconds(gap);
+
+		obj.SetActive(false);
+		anyCoroutine = null;
 	}
 }

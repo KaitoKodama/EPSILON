@@ -18,6 +18,7 @@ public class CVSUnitSelecter : MonoBehaviour
 	[SerializeField] GameObject unitGridPrefab = default;
 
 	private BattleManager battleManager;
+	private BattleCVSSoundManager soundManager;
 	private RectTransform unitGroupRect;
 	private List<RequestUnit> requestUnitList = new List<RequestUnit>();
 	private float enableCost = 0;
@@ -27,6 +28,7 @@ public class CVSUnitSelecter : MonoBehaviour
 	private void Start()
 	{
 		InitEventSystems();
+		soundManager = GetComponentInParent<BattleCVSSoundManager>();
 		unitBtnImg.DOFade(0.8f, 1f).SetLoops(-1, LoopType.Yoyo);
 		unitGroupRect = unitGroupPanel.GetComponent<RectTransform>();
 		unitGroupRect.anchoredPosition = new Vector2(0, -47.1f);
@@ -62,18 +64,21 @@ public class CVSUnitSelecter : MonoBehaviour
 	//------------------------------------------
 	public void OnRemoveRequestUnit(RequestUnit cancelUnit)
 	{
+		soundManager.OnPointSound();
 		enableCost += cancelUnit.param.Cost;
 		requestUnitList.Remove(cancelUnit);
 		SetUnitCostText();
 	}
 	public void OnAddRequestUnit(RequestUnit requestUnit)
 	{
+		soundManager.OnPointSound();
 		enableCost -= requestUnit.param.Cost;
 		requestUnitList.Add(requestUnit);
 		SetUnitCostText();
 	}
 	public void OnDetailDisplay(ActorParam param)
 	{
+		soundManager.OnPointSound();
 		unitDetail.OnActivatePanel(param);
 	}
 
@@ -90,6 +95,7 @@ public class CVSUnitSelecter : MonoBehaviour
 	//------------------------------------------
 	private void OnUnitButton()
 	{
+		soundManager.OnPointSound();
 		if (!isUnitGroupOpen)
 		{
 			isUnitGroupOpen = true;
@@ -107,6 +113,7 @@ public class CVSUnitSelecter : MonoBehaviour
 	{
 		if(requestUnitList != null && requestUnitList.Count > 0)
 		{
+			soundManager.OnPointSound();
 			battleManager.OnBeginBattle(requestUnitList);
 		}
 		else
