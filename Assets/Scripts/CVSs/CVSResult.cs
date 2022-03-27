@@ -51,10 +51,10 @@ public class CVSResult : MonoBehaviour
 	}
 	private void OnNextButton()
 	{
-		GameManager.instance.OnSceneTransition(battleManager.NextScene);
+		GameManager.instance.OnSceneTransition(battleManager.Stage.NextScene);
 	}
 	private void OnRestartButton()
 	{
-		GameManager.instance.OnSceneTransition(battleManager.CurrentScene);
+		GameManager.instance.OnSceneTransition(battleManager.Stage.CurrentScene);
 	}
 }

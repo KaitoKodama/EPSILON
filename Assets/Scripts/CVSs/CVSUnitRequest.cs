@@ -8,16 +8,14 @@ public class CVSUnitRequest : MonoBehaviour, IDragHandler
 {
     [SerializeField] Button requestCancelBtn = default;
     [SerializeField] Image gridImg = default;
-
+    [SerializeField] GameObject gridImageObj = default;
     private CVSUnitSelecter unitSelecter;
     private RequestUnit requestUnit;
-    private Transform _transform;
 
 
 	void Start()
     {
         requestCancelBtn.onClick.AddListener(OnRequestCancelBtn);
-        _transform = transform;
     }
 
 
@@ -26,10 +24,10 @@ public class CVSUnitRequest : MonoBehaviour, IDragHandler
     //------------------------------------------
     public void InitRequestGrid(CVSUnitSelecter unitSelecter, RequestUnit request)
 	{
+        gridImageObj.transform.rotation = unitSelecter.GetTargetRotate();
         this.unitSelecter = unitSelecter;
         requestUnit = request;
         gridImg.sprite = request.param.ActorSprite;
-
         var cvs = GetComponent<Canvas>();
         cvs.worldCamera = Camera.main;
         cvs.sortingOrder = 30;
@@ -51,8 +49,6 @@ public class CVSUnitRequest : MonoBehaviour, IDragHandler
     public void OnDrag(PointerEventData eventData)
 	{
         var pos = Camera.main.ScreenToWorldPoint(eventData.position);
-        pos.z = 0;
-        if (pos.x > -1) pos.x = -1;
-        _transform.position = pos;
-	}
+        requestUnit.requestGrid.transform.position = unitSelecter.GetDragAreaInRange(pos);
+    }
 }

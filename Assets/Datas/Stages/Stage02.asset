@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5cfe44cd711743498201792c845d165, type: 3}
+  m_Name: Stage02
+  m_EditorClassIdentifier: 
+  enableActorParams:
+  - {fileID: 11400000, guid: fcfb7e67fd096c8479eca43dfb76f884, type: 2}
+  - {fileID: 11400000, guid: 6f682b5eb0d555e49abc74eb4590162a, type: 2}
+  - {fileID: 11400000, guid: 0f66eb20f41fbc6449faf56e7b714cce, type: 2}
+  - {fileID: 11400000, guid: c6de64210067f114bbc2ccf0f5d715aa, type: 2}
+  - {fileID: 11400000, guid: 46d8206ac643b3741a4cd2c1eddd9d5f, type: 2}
+  - {fileID: 11400000, guid: 8365e015bde87ef4195282abfbf0ed31, type: 2}
+  simulateMode: 0
+  currentScene: 4
+  nextScene: 5
+  gainPatch: 2
+  enableCost: 40

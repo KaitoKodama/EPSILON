@@ -23,7 +23,7 @@ public class CVSUnitDetail : MonoBehaviour
 		gameObject.SetActive(true);
 		nameTxt.text = "名称：" + param.ActorName;
 		costTxt.text = "コスト：" + param.Cost.ToString() + "G";
-		explainTxt.text = "説明：" + param.ActorExplain;
+		explainTxt.text = param.ActorExplain;
 		actorImg.sprite = param.ActorSprite;
 	}
 	private void OnCloseButton()

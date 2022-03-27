@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,7 +44,6 @@ public class CVSUnitGrid : MonoBehaviour, IBeginDragHandler, IDragHandler, IPoin
 			var requestGrid = Instantiate(unitRequestPrefab);
 			var requet = requestGrid.GetComponent<CVSUnitRequest>();
 			requestUnit = new RequestUnit(reruestActorParam, requestGrid);
-
 			requet.InitRequestGrid(unitSelecter, requestUnit);
 			unitSelecter.OnAddRequestUnit(requestUnit);
 		}
@@ -53,9 +53,7 @@ public class CVSUnitGrid : MonoBehaviour, IBeginDragHandler, IDragHandler, IPoin
 		if(requestUnit != null)
 		{
 			var pos = Camera.main.ScreenToWorldPoint(eventData.position);
-			pos.z = 0;
-			if (pos.x > -1) pos.x = -1;
-			requestUnit.requestGrid.transform.position = pos;
+			requestUnit.requestGrid.transform.position = unitSelecter.GetDragAreaInRange(pos);
 		}
 	}
 }

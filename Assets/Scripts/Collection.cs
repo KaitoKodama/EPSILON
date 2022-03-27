@@ -77,10 +77,19 @@ public enum Friendly
 	PlayerFriendly,
 	EnemyFriendly,
 }
+public enum RequestTarget
+{
+	PlayerUnit,
+	EnemyUnit,
+}
+public enum SimulateMode
+{
+	UnitBattle,
+	UnitFreedom,
+}
 public enum StagePatch
 {
 	None,
-	TutorialCompleted,
 	Stage01Completed,
 	Stage02Completed,
 	Stage03Completed,
@@ -93,7 +102,6 @@ public enum StagePatch
 public enum SceneName
 {
 	TitleScene,
-	TutorialScene,
 	SelectScene,
 	FreedomScene,
 	Stage01,

@@ -114,6 +114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requestCancelBtn: {fileID: 5890671372037777516}
   gridImg: {fileID: 5890671372656666894}
+  gridImageObj: {fileID: 5890671372656666928}
 --- !u!1 &1742546122215638954
 GameObject:
   m_ObjectHideFlags: 0
